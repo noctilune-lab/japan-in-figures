@@ -17,8 +17,8 @@ export const regions = {
   render() {
     const opts = regionNames.map((r) => `<option>${r}</option>`).join('');
     return `${pageHead('Section 5', 'Regions', 'Japan has 47 prefectures in eight regional groupings. Search by name, capital or region; click a column heading to sort.')}
-<div class="controls"><label>Search <input id="pref-search" type="search" placeholder="e.g. Kyoto, Nagoya, Kanto" autocomplete="off"></label>
-<label>Region <select id="pref-region"><option value="">All regions</option>${opts}</select></label>
+<div class="controls"><label>Search <input id="pref-search" type="search" aria-label="Search prefectures by name, capital or region" placeholder="e.g. Kyoto, Nagoya, Kanto" autocomplete="off"></label>
+<label>Region <select id="pref-region" aria-label="Filter prefectures by region"><option value="">All regions</option>${opts}</select></label>
 <span id="pref-count" class="count" aria-live="polite"></span></div>
 ${tableHtml('pref-table', columns, prefectures, 'The 47 prefectures of Japan')}
 <p id="pref-empty" class="empty" hidden>No prefecture matches this search.</p>

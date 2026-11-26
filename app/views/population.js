@@ -28,10 +28,10 @@ ${factTable(['population', 'popGrowth', 'popRank', 'landArea', 'density', 'urban
 <div id="pop-chart-host"></div>
 </section>
 <section class="panel"><h2>Age structure, 2024</h2>
-${figure('chart-age', 'Share of population by age group (%)', stackedBar(ageStructure), 'Unit: % of population. Year: 2024. Source: World Bank WDI. † Derived as the remainder: 100 − 11.4 − 29.8. In 2025 the 65+ share is 30.0% (WDI).')}
+${figure('chart-age', 'Share of population by age group (%)', stackedBar(ageStructure, { name: 'Age structure, percent of population, 2024' }), 'Unit: % of population. Year: 2024. Source: World Bank WDI. † Derived as the remainder: 100 − 11.4 − 29.8. In 2025 the 65+ share is 30.0% (WDI).')}
 ${factTable(['age0', 'age65', 'age65b', 'medianAge'], 'Age indicators')}</section>
 <section class="panel"><h2>Births, deaths and fertility</h2>
-${figure('chart-vital', 'Births and deaths per 1,000 people, 2024', hBars(vitalRates, { max: 15, unit: 'per 1,000 people' }), 'Unit: per 1,000 people. Year: 2024. Source: World Bank WDI. Deaths outnumber births, which is why the population is falling.')}
+${figure('chart-vital', 'Births and deaths per 1,000 people, 2024', hBars(vitalRates, { max: 15, unit: 'per 1,000 people', name: 'Births and deaths, 2024' }), 'Unit: per 1,000 people. Year: 2024. Source: World Bank WDI. Deaths outnumber births, which is why the population is falling.')}
 ${factTable(['birthRate', 'deathRate', 'fertility'], 'Vital statistics')}</section>`;
   },
   mount(root) {

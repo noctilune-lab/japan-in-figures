@@ -17,7 +17,7 @@ export const overview = {
   title: 'Overview',
   render() {
     const chart = figure('chart-overview', 'Population of Japan, 2000–2024 (million people)',
-      lineChart(populationSeries.points, { year: 2024 }),
+      lineChart(populationSeries.points, { year: 2024, unit: 'population, million people' }),
       'Unit: million people, approximate. Years: 2000, 2005, 2010, 2015, 2020, 2024. Source: World Bank WDI.');
     const links = sections.map(([h, t, d]) => `<li><a href="${h}"><strong>${t}</strong><span>${d}</span></a></li>`).join('');
     return `${pageHead('Japan in Figures · yearbook edition', 'Japan at a glance', `${country.name}: capital ${country.capital}, ${country.prefectures} prefectures, currency ${country.currency}, language ${country.language}. Latest available figures, each with its publisher and year.`)}
