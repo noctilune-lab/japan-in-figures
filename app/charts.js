@@ -1,13 +1,19 @@
 // Inline SVG charts drawn from plain arrays: a line chart with a selectable year, horizontal bars and a stacked bar.
-// Colours come from CSS classes, so the stylesheet owns the palette.
+// Colours come from CSS classes, so the stylesheet owns the palette. Every SVG root is focusable="false" so old
+// browsers do not add the chart to the tab order; the chart is named for screen readers by role="img" and a title.
 
 const W = 640;
 
 // Line chart of {year, value} points. mode "level" plots the values; "change" plots the difference from the first
 // point (derived). `year` marks one point.
 export function lineChart(points, { mode = 'level', year = null, unit = '' } = {}) {
-  const name = `${mode === 'change' ? 'Change since ' + points[0].year + ', ' : ''}Line chart of ${unit || 'values'}, ${points.map((p) => p.year).join(', ')}`;
   const first = points[0].value;
+  // The accessible title states the years, the range of the plotted values and the final value, all from `points`.
+  const shown = points.map((p) => (mode === 'change' ? +(p.value - first).toFixed(1) : p.value));
+  const sign = (v) => (mode === 'change' && v > 0 ? '+' : '');
+  const range = `ranging from ${sign(Math.min(...shown))}${Math.min(...shown)} to ${sign(Math.max(...shown))}${Math.max(...shown)}`;
+  const last = points[points.length - 1];
+  const name = `${mode === 'change' ? 'Change since ' + points[0].year + ', ' : ''}Line chart of ${unit || 'values'}, ${points.map((p) => p.year).join(', ')}; ${range}; ${last.year} value ${sign(shown[shown.length - 1])}${shown[shown.length - 1]}`;
   const vals = points.map((p) => (mode === 'change' ? +(p.value - first).toFixed(1) : p.value));
   const lo = mode === 'change' ? Math.min(...vals, 0) : Math.floor(Math.min(...vals) - 1);
   const hi = mode === 'change' ? Math.max(...vals, 0) + 0.5 : Math.ceil(Math.max(...vals) + 1);
@@ -26,7 +32,7 @@ export function lineChart(points, { mode = 'level', year = null, unit = '' } = {
       `<text class="xtick${on ? ' on' : ''}" x="${x(i).toFixed(1)}" y="${H - 12}" text-anchor="middle">${p.year}</text>` +
       `<text class="vlabel${on ? ' on' : ''}" x="${x(i).toFixed(1)}" y="${(y(vals[i]) - 11).toFixed(1)}" text-anchor="middle">${mode === 'change' && vals[i] > 0 ? '+' : ''}${vals[i]}</text>`;
   }).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${name}"><title>${name}</title>${grid}${zero}<path class="line" d="${path}"/>${dots}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" focusable="false" aria-label="${name}"><title>${name}</title>${grid}${zero}<path class="line" d="${path}"/>${dots}</svg>`;
 }
 
 // Horizontal bars for {label, value}; `max` is the value at full width.
@@ -40,7 +46,7 @@ export function hBars(items, { max, unit = '', decimals = 1, name = '' } = {}) {
       `<rect class="bar${it.derived ? ' derived' : ''}" x="${L}" y="${y0 + 5}" width="${w.toFixed(1)}" height="22"/>` +
       `<text class="barvalue" x="${L + w + 8}" y="${y0 + 21}">${it.value.toFixed(decimals)}</text>`;
   }).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}"><title>${label}</title>${rows}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" focusable="false" aria-label="${label}"><title>${label}</title>${rows}</svg>`;
 }
 
 // One stacked bar summing to 100 %, with a legend row underneath each segment.
@@ -55,5 +61,5 @@ export function stackedBar(items, { name = 'Stacked bar' } = {}) {
       `<text class="segvalue" x="${(x0 + w / 2).toFixed(1)}" y="43" text-anchor="middle">${it.value.toFixed(1)}%</text>` +
       `<text class="seglabel" x="${(x0 + w / 2).toFixed(1)}" y="82" text-anchor="middle">${it.label.replace('Ages ', '')}${it.derived ? ' †' : ''}</text>`;
   }).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}"><title>${label}</title>${segs}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" focusable="false" aria-label="${label}"><title>${label}</title>${segs}</svg>`;
 }
